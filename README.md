@@ -1,0 +1,2 @@
+# AZToolsPySide2Template
+BlenderでPySide2のGUIを起動するテンプレートAddon
