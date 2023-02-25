@@ -1,2 +1,4 @@
 /Settings.ini
 /__pycache__
+/Operators/__pycache__
+*.pyc

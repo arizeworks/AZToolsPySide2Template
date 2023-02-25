@@ -28,10 +28,15 @@ class MainWindow(QtWidgets.QMainWindow):
         self.setWindowFlags(self.windowFlags() ^ QtCore.Qt.WindowStaysOnTopHint)
         self.loadSettings()
 
+
         func.pushButton_bpy(self.ui.pushButton, bpy_cmd="bpy.ops.mesh.primitive_monkey_add(context['VIEW_3D'])", icon="")
+        self.ui.pushButton.setText("Add Monkey")
+
+
 
         # ウィンドウを表示
         self.show()
+
 
 
     def loadSettings(self):

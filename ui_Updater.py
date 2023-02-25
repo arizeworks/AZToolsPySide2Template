@@ -1,11 +1,18 @@
 import subprocess
 import os
 
+
+file_dir = os.path.join(os.path.dirname(__file__))
+blender_python_dir_path = os.path.abspath(os.__file__ + "/../..")
+blender_python_path = blender_python_dir_path + "/bin/python.exe"
+
+pyside2_path = blender_python_dir_path + "/lib/site-packages/PySide2"
+pyside2_qtdesigner = pyside2_path + "/designer.exe"
+pyside2_uic = blender_python_dir_path + "/Scripts/pyside2-uic.exe"
+
 UI_NAME = "PySide2Template"
-os_python_path = os.path.expandvars("%LOCALAPPDATA%/Programs/Python/Python310")
-pyside2_uic = os_python_path + "/Scripts/pyside2-uic.exe"
-target_uipy = f"ui_{UI_NAME}.py"
-target_ui = f"{UI_NAME}.ui"
+target_uipy = file_dir + f"/ui_{UI_NAME}.py"
+target_ui = file_dir + f"/{UI_NAME}.ui"
 
 
 def UpdateUI():
