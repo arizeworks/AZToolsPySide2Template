@@ -1,7 +1,14 @@
 import sys
 import os
 
+
 from PySide2 import QtWidgets, QtCore
+
+try:
+    from .data_path import datapath
+except:
+    from data_path import datapath
+
 try:
     from . import ui_PySide2Template
     from .Operators import operator_func as func
@@ -11,7 +18,6 @@ except:
     from Operators import operator_func as func
     DEBUG_MODE = True
 
-file_dir = os.path.join(os.path.dirname(__file__))
 
 
 # PySide2 UI ############################################################################
@@ -40,13 +46,13 @@ class MainWindow(QtWidgets.QMainWindow):
 
 
     def loadSettings(self):
-        setting = QtCore.QSettings((file_dir + "\\Settings.ini"), QtCore.QSettings.IniFormat)
+        setting = QtCore.QSettings((datapath["file"]["dir"] + "\\Settings.ini"), QtCore.QSettings.IniFormat)
         # lineEdit.setText(setting.value(lineEdit.objectName()))
         self.restoreGeometry(setting.value("geometry"))
 
 
     def saveSettings(self):
-        setting = QtCore.QSettings((file_dir + "\\Settings.ini"), QtCore.QSettings.IniFormat)
+        setting = QtCore.QSettings((datapath["file"]["dir"] + "\\Settings.ini"), QtCore.QSettings.IniFormat)
         # setting.setValue(self.ui.lineEdit_import_fbx.objectName(), self.ui.lineEdit_import_fbx.text())
         setting.setValue("geometry", self.saveGeometry())
 

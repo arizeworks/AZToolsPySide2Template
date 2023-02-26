@@ -3,7 +3,13 @@ import os
 import subprocess
 
 try:
+    from .data_path import datapath
+except:
+    from data_path import datapath
+
+try:
     from PySide2 import QtWidgets, QtCore
+
     INSTALL_MODE = False
 except:
     INSTALL_MODE = True
@@ -24,26 +30,10 @@ bl_info = {
     "author": "Arizeworks",
     "location": "3D View > N-Panel / T-Panel > AZTools",
     "warning": "Warning: this addon is still developping",
-    "description": "AZTools",
+    "description": "AZTools PySide2 Template",
     "category": "AZTools",
     "url": "https://github.com/arizeworks/AZToolsPySide2Template",
 }
-
-
-# VAR ###################################################################################
-
-
-file_dir = os.path.join(os.path.dirname(__file__))
-blender_python_dir_path = os.path.abspath(os.__file__ + "/../..")
-blender_python_path = blender_python_dir_path + "/bin/python.exe"
-
-pyside2_path = blender_python_dir_path + "/lib/site-packages/PySide2"
-pyside2_qtdesigner = pyside2_path + "/designer.exe"
-pyside2_uic = blender_python_dir_path + "/Scripts/pyside2-uic.exe"
-
-UI_NAME = "PySide2Template"
-target_uipy = file_dir + f"/ui_{UI_NAME}.py"
-target_ui = file_dir + f"/{UI_NAME}.ui"
 
 
 # Blender UI ############################################################################
@@ -64,10 +54,16 @@ def AZToolsBlender(self, context):
         row = box.row(align=True)
         row.scale_y = 1.5
         row.operator("aztools.display_window_pyside2_template")
+
+        box.label(text="Edit")
+        row = box.row(align=True)
+        row.scale_y = 1.5
+        row.operator("aztools.open_dir_pyside2_template")
+        # row.operator("aztools.reload_aztools_pyside2_template")
         row = box.row(align=True)
         row.scale_y = 1.5
         row.operator("aztools.edit_ui_pyside2_template")
-        row.operator("aztools.update_ui_pyside2_template")
+        # row.operator("aztools.update_ui_pyside2_template")
 
         # PySide2 アンインストールボタン
         box.label(text="PySide2")
@@ -167,15 +163,15 @@ class AZTOOLS_OT_InstallPySide2_PySide2Template(bpy.types.Operator):
         moduleName = "PySide2"
 
         if self.install:
-            if os.system('"' + blender_python_path + '" -m pip install ' + moduleName) == 0:
+            if os.system('"' + datapath["python"]["exe"] + '" -m pip install ' + moduleName) == 0:
                 print("Installed " + moduleName)
-                bpy.ops.aztools.reload_aztools_pyside2template_gui()
+
             else:
                 print("Installation Failed")
         else:
-            if os.system('"' + blender_python_path + '" -m pip uninstall -y ' + moduleName) == 0:
+            if os.system('"' + datapath["python"]["exe"] + '" -m pip uninstall -y ' + moduleName) == 0:
                 print("UnInstalled " + moduleName)
-                bpy.ops.aztools.reload_aztools_pyside2template_gui()
+
             else:
                 print("UnInstallation Failed")
 
@@ -190,7 +186,7 @@ class AZTOOLS_OT_EditUI_PySide2Template(bpy.types.Operator):
     install: bpy.props.BoolProperty(default=True)
 
     def execute(self, context):
-        subprocess.Popen([pyside2_qtdesigner, target_ui])
+        subprocess.Popen([datapath["pyside2"]["qtdesigner"], datapath["pyside2"]["ui"]])
         return {"FINISHED"}
 
 
@@ -202,25 +198,40 @@ class AZTOOLS_OT_UpdateUI_PySide2Template(bpy.types.Operator):
     install: bpy.props.BoolProperty(default=True)
 
     def execute(self, context):
-        try:
-            cmd = " ".join([pyside2_uic, "-o " + target_uipy, target_ui])
-            subprocess.call(cmd, shell=True)
-            print("success")
-        except Exception as e:
-            print(e)
+        from .ui_Updater import UpdateUI
+        UpdateUI()
+
         return {"FINISHED"}
 
 
 class AZTOOLS_OT_ReloadAZTools_PySide2Template(bpy.types.Operator):
     bl_label = "Reload"
-    bl_idname = "aztools.reload_aztools_pyside2template_gui"
+    bl_idname = "aztools.reload_aztools_pyside2_template"
+    bl_description = "Reload"
 
     def execute(self, context):
-        bpy.ops.preferences.addon_disable(module="AZTools PySide2 Template")
-        bpy.ops.preferences.addon_refresh()
-        bpy.ops.preferences.addon_enable(module="AZTools PySide2 Template")
-        bpy.ops.aztools.display_window()
+        bpy.ops.preferences.addon_disable(module="AZToolsPySide2Template")
 
+        bpy.ops.preferences.addon_refresh()
+
+        bpy.ops.preferences.addon_enable(module="AZToolsPySide2Template")
+
+        return {"FINISHED"}
+
+
+class AZTOOLS_OT_OpenDir_PySide2Template(bpy.types.Operator):
+    bl_idname = "aztools.open_dir_pyside2_template"
+    bl_label = "Open PySide2 Folder"
+    bl_description = "Open PySide2 Folder"
+
+    dir: bpy.props.StringProperty(default=datapath["file"]["dir"])
+
+    def execute(self, context):
+        open_path = str(self.dir)
+        if open_path[-1:] == "\\":
+            open_path = open_path[:-1]
+        subprocess.Popen(["explorer", open_path])
+        print(open_path)
         return {"FINISHED"}
 
 
@@ -235,6 +246,7 @@ CLASSES = (
     AZTOOLS_OT_EditUI_PySide2Template,
     AZTOOLS_OT_UpdateUI_PySide2Template,
     AZTOOLS_OT_ReloadAZTools_PySide2Template,
+    AZTOOLS_OT_OpenDir_PySide2Template,
 )
 
 
