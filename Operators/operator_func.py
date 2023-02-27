@@ -12,6 +12,7 @@ except:
     import ui_PySide2Template
     DEBUG_MODE = True
 
+
 def bpy_execute(bpy_cmd):
 
     area = defaultdict(dict)
@@ -69,7 +70,7 @@ def pushButton_bpy(pushButton, bpy_cmd: str, icon: str):
         pushButton.setEnabled(False)
         pushButton.setStyleSheet("background-color : rgba(0, 0, 0, 0.2)")
         pushButton.setStyleSheet("color : rgb(0, 0, 0)")
-        bpy_cmd = "NULL"
+        
 
 
 def pushButton_func(pushButton, func_cmd, icon):
@@ -120,7 +121,7 @@ def checkBox_bpy(checkBox, bpy_cmd: str):
         checkBox.setEnabled(False)
         checkBox.setStyleSheet("background-color : rgba(0, 0, 0, 0.2)")
         checkBox.setStyleSheet("color : rgb(0, 0, 0)")
-        bpy_cmd = "NULL"
+        
 
 
 def lineEdit_bpy(lineEdit, bpy_cmd: str):
@@ -132,4 +133,4 @@ def lineEdit_bpy(lineEdit, bpy_cmd: str):
         lineEdit.setEnabled(False)
         lineEdit.setStyleSheet("background-color : rgba(0, 0, 0, 0.2)")
         lineEdit.setStyleSheet("color : rgb(0, 0, 0)")
-        bpy_cmd = "NULL"
+        
